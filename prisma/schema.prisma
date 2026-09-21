@@ -1,0 +1,185 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id           String  @id @default(uuid())
+  email        String  @unique
+  passwordHash String?
+  name         String?
+  role         String  @default("USER")
+
+  // Поля Onboarding / Профілю
+  gender        String?
+  age           Int?
+  height        Float?
+  weight        Float?
+  activityLevel Float?
+  goal          String?
+
+  // Цільові норми КБЖВ
+  targetCalories Float?
+  targetProteins Float?
+  targetFats     Float?
+  targetCarbs    Float?
+
+  // Інтеграція з Telegram
+  telegramChatId String? @unique
+
+  createdAt DateTime @default(now())
+
+  // Зв'язки
+  recipes        Recipe[]
+  mealLogs       MealLog[]
+  waterLogs      WaterLog[]
+  weightLogs     WeightLog[]
+  recipeRatings  RecipeRating[]
+  recipeComments RecipeComment[]
+  recipeLikes    RecipeLike[]
+  aiUsages       AiUsage[]
+}
+
+model Product {
+  id              String  @id @default(uuid())
+  name            String
+  caloriesPer100g Float
+  proteinsPer100g Float
+  fatsPer100g     Float
+  carbsPer100g    Float
+  barcode         String? @unique
+
+  // Зв'язки
+  recipeIngredients RecipeIngredient[]
+  mealLogItems      MealLogItem[]
+}
+
+model Recipe {
+  id            String   @id @default(uuid())
+  title         String
+  description   String
+  instructions  String?
+  isAiGenerated Boolean  @default(false)
+  isPublic      Boolean  @default(true)
+  authorId      String
+  createdAt     DateTime @default(now())
+
+  // Зв'язки
+  author       User               @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  ingredients  RecipeIngredient[]
+  ratings      RecipeRating[]
+  comments     RecipeComment[]
+  likes        RecipeLike[]
+  mealLogItems MealLogItem[]
+}
+
+model RecipeIngredient {
+  id          String @id @default(uuid())
+  recipeId    String
+  productId   String
+  amountGrams Float
+
+  // Зв'язки
+  recipe  Recipe  @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model MealLog {
+  id            String   @id @default(uuid())
+  userId        String
+  date          DateTime
+  mealType      String
+  totalCalories Float    @default(0)
+
+  // Зв'язки
+  user  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items MealLogItem[]
+}
+
+model MealLogItem {
+  id                 String  @id @default(uuid())
+  mealLogId          String
+  productId          String?
+  recipeId           String?
+  customName         String
+  weightGrams        Float
+  calculatedCalories Float
+  calculatedProteins Float
+  calculatedFats     Float
+  calculatedCarbs    Float
+
+  // Зв'язки
+  mealLog MealLog  @relation(fields: [mealLogId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id])
+  recipe  Recipe?  @relation(fields: [recipeId], references: [id])
+}
+
+model RecipeRating {
+  id        String   @id @default(uuid())
+  userId    String
+  recipeId  String
+  value     Int
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, recipeId])
+}
+
+model RecipeComment {
+  id        String   @id @default(uuid())
+  userId    String
+  recipeId  String
+  text      String
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+}
+
+model RecipeLike {
+  id        String   @id @default(uuid())
+  userId    String
+  recipeId  String
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, recipeId])
+}
+
+model WaterLog {
+  id        String   @id @default(uuid())
+  userId    String
+  amountMl  Int
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model WeightLog {
+  id       String   @id @default(uuid())
+  userId   String
+  weightKg Float
+  date     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AiUsage {
+  id               String   @id @default(uuid())
+  userId           String
+  endpoint         String
+  promptTokens     Int
+  completionTokens Int
+  totalTokens      Int
+  timestamp        DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
