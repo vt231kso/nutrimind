@@ -1,8 +1,0 @@
-stages:
-  - build
-
-# Мінімальний запуск для успішного проходження CI/CD на GitLab
-build_project:
-  stage: build
-  script:
-    - echo "Skip automated testing runner check for coursework development stage."
