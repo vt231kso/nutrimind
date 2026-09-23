@@ -43,7 +43,7 @@ export function RegisterForm() {
         router.push("/login?registered=true");
       } else {
         router.refresh(); // Оновлює стан сесії в Header
-        router.push("/");  // Перенаправляє на головну
+        router.push("/dashboard");  // Перенаправляє на головну
       }
     } catch {
       setError("Сталася неочікувана помилка під час реєстрації.");
@@ -63,7 +63,7 @@ export function RegisterForm() {
         type="button"
         variant="outline"
         className="w-full flex items-center justify-center gap-2 border-slate-200 mb-6 hover:bg-slate-50"
-        onClick={() => signIn("google", { callbackUrl: "/" })}
+        onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
       >
         <svg className="w-5 h-5" viewBox="0 0 24 24">
           <path

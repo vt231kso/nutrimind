@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Header from "@/components/layout/Header";
 
 // Тестові рецепти для демонстрації дизайну
 const MOCK_RECIPES = [
@@ -37,10 +36,8 @@ const MOCK_RECIPES = [
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans">
-
-      <Header />
-
+    <main className="text-slate-800 font-sans">
+      {/* Hero-секція */}
       <section className="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-b from-purple-50/60 to-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="inline-block bg-purple-100 text-purple-700 font-semibold text-xs px-3 py-1.5 rounded-full mb-4">
@@ -54,7 +51,7 @@ export default function HomePage() {
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/register"
+              href="/dashboard"
               className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-purple-200 transition transform hover:-translate-y-0.5"
             >
               Розрахувати свою норму
@@ -69,7 +66,7 @@ export default function HomePage() {
         </div>
       </section>
 
-
+      {/* Секція рецептів */}
       <section id="recipes" className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div>
@@ -77,7 +74,9 @@ export default function HomePage() {
             <p className="text-slate-500 text-sm mt-1">Збалансовані страви з підрахованим КБЖВ</p>
           </div>
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
-            <button className="bg-purple-600 text-white text-xs font-semibold px-4 py-2 rounded-xl">Усі</button>
+            <button className="bg-purple-600 text-white text-xs font-semibold px-4 py-2 rounded-xl">
+              Усі
+            </button>
             <button className="bg-white text-slate-600 border border-slate-200 text-xs font-semibold px-4 py-2 rounded-xl hover:bg-purple-50 hover:text-purple-600 transition">
               Сніданки
             </button>
@@ -129,12 +128,6 @@ export default function HomePage() {
           ))}
         </div>
       </section>
-
-      <footer className="bg-white border-t border-slate-100 py-8">
-        <div className="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400">
-          © {new Date().getFullYear()} NutriMind. Усі права захищено. Курсова робота.
-        </div>
-      </footer>
-    </div>
+    </main>
   );
 }

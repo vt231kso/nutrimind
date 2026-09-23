@@ -6,7 +6,7 @@ import { useSession, signOut } from "next-auth/react";
 import NavLinks from "@/components/header/NavLinks";
 import UserAuthBlock from "@/components/header/UserAuthBlock";
 
-export default function Header() {
+export  function Header() {
   const { data: session, status } = useSession();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 

@@ -1,24 +1,16 @@
 import type { Metadata } from "next";
-
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 import SessionProvider from "@/components/providers/SessionProvider";
 
+const inter = Inter({ subsets: ["latin", "cyrillic"] });
+
 export const metadata: Metadata = {
-  title: "NutriMind",
-  description: "Розумний трекінг харчування з ШІ",
+  title: "NutriMind — Персональний трекер харчування та КБЖВ",
+  description: "Розрахунок добової норми калорій, щоденник харчування та рекомендації з штучним інтелектом.",
 };
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-
 
 export default function RootLayout({
                                      children,
@@ -27,9 +19,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="uk">
-    <body>
+    <body className={`${inter.className} bg-slate-50 min-h-screen flex flex-col justify-between`}>
     <SessionProvider>
-      {children}
+      {/* Хедер на всіх сторінках */}
+      <Header />
+
+      {/* Контент сторінки */}
+      <div className="flex-1">
+        {children}
+      </div>
+
+      {/* Футер на всіх сторінках */}
+      <Footer />
     </SessionProvider>
     </body>
     </html>
