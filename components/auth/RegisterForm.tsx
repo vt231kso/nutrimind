@@ -6,12 +6,50 @@ import { registerUser } from "@/app/actions/auth";
 import { useAuthForm } from "@/hooks/useAuthForm";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import {useState} from "react";
+import {useRouter} from "next/navigation";
 
 export function RegisterForm() {
-  const { error, loading, handleSubmit } = useAuthForm(
-    registerUser,
-    "/login?registered=true"
-  );
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    try {
+      // 1. Створюємо акаунт у базі даних (Server Action)
+      const res = await registerUser(formData);
+
+      if (res.error) {
+        setError(res.error);
+        setLoading(false);
+        return;
+      }
+
+      // 2. Одразу безшовно входимо через NextAuth (signIn)
+      const signInRes = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (signInRes?.error) {
+        router.push("/login?registered=true");
+      } else {
+        router.refresh(); // Оновлює стан сесії в Header
+        router.push("/");  // Перенаправляє на головну
+      }
+    } catch {
+      setError("Сталася неочікувана помилка під час реєстрації.");
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="bg-white py-8 px-6 shadow-xl shadow-purple-100/50 rounded-2xl border border-purple-100 sm:px-10">
