@@ -93,22 +93,34 @@ model Product {
 }
 
 model Recipe {
-  id            String   @id @default(uuid())
-  title         String
-  description   String
-  instructions  String?
-  isAiGenerated Boolean  @default(false)
-  isPublic      Boolean  @default(true)
-  authorId      String
-  createdAt     DateTime @default(now())
+  id              String   @id @default(uuid())
+  title           String
+  description     String
+  category        String?
+  prepTimeMinutes Int?
+  difficultyLevel String?
+  isAiGenerated   Boolean  @default(false)
+  isPublic        Boolean  @default(true)
+  authorId        String
+  createdAt       DateTime @default(now())
 
   // Зв'язки
   author       User               @relation(fields: [authorId], references: [id], onDelete: Cascade)
   ingredients  RecipeIngredient[]
+  steps        RecipeStep[]
   ratings      RecipeRating[]
   comments     RecipeComment[]
   likes        RecipeLike[]
   mealLogItems MealLogItem[]
+}
+
+model RecipeStep {
+  id              String @id @default(uuid())
+  recipeId        String
+  stepNumber      Int
+  instructionText String
+
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 }
 
 model RecipeIngredient {

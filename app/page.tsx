@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Header from "@/components/layout/Header";
 
 // Тестові рецепти для демонстрації дизайну
 const MOCK_RECIPES = [
@@ -37,49 +38,9 @@ const MOCK_RECIPES = [
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 font-sans">
-      {/* 1. ШАПКА (Header) */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-purple-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          {/* Логотип */}
-          <Link href="/" className="flex items-center gap-2 text-2xl font-bold text-purple-700 tracking-tight">
-            <span className="bg-purple-600 text-white w-9 h-9 rounded-xl flex items-center justify-center font-extrabold shadow-md shadow-purple-200">
-              N
-            </span>
-            Nutri<span className="text-slate-900">Mind</span>
-          </Link>
 
-          {/* Навігація для десктопу */}
-          <nav className="hidden md:flex items-center gap-8 font-medium text-slate-600 text-sm">
-            <Link href="/" className="text-purple-600 font-semibold transition">
-              Головна
-            </Link>
-            <Link href="#recipes" className="hover:text-purple-600 transition">
-              Рецепти
-            </Link>
-            <Link href="#about" className="hover:text-purple-600 transition">
-              Про проєкт
-            </Link>
-          </nav>
+      <Header />
 
-          {/* Кнопки авторизації (для гостя) */}
-          <div className="flex items-center gap-3">
-            <Link
-              href="/login"
-              className="text-sm font-semibold text-purple-700 hover:bg-purple-50 px-4 py-2 rounded-xl transition"
-            >
-              Увійти
-            </Link>
-            <Link
-              href="/register"
-              className="text-sm font-semibold bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-xl shadow-md shadow-purple-200 transition active:scale-95"
-            >
-              Реєстрація
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      {/* 2. HERO SECTION (Головний привітальний блок) */}
       <section className="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-b from-purple-50/60 to-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="inline-block bg-purple-100 text-purple-700 font-semibold text-xs px-3 py-1.5 rounded-full mb-4">
@@ -108,7 +69,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. КАТАЛОГ РЕЦЕПТІВ (Public Recipe Grid) */}
+
       <section id="recipes" className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div>
@@ -129,7 +90,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Сітка картка з рецептами */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {MOCK_RECIPES.map((recipe) => (
             <div
@@ -151,7 +111,6 @@ export default function HomePage() {
                 </p>
               </div>
 
-              {/* Макронутрієнти (БЖВ) */}
               <div className="mt-6 pt-4 border-t border-slate-100 grid grid-cols-3 text-center text-xs">
                 <div>
                   <span className="block text-slate-400">Білки</span>
@@ -171,7 +130,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 4. ФУТЕР (Footer) */}
       <footer className="bg-white border-t border-slate-100 py-8">
         <div className="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400">
           © {new Date().getFullYear()} NutriMind. Усі права захищено. Курсова робота.

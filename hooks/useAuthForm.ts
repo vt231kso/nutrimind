@@ -22,6 +22,8 @@ export function useAuthForm(action: AuthAction, redirectTo: string) {
       if (result.error) {
         setError(result.error);
       } else {
+        // Обов'язково оновлюємо сесійний кеш Next.js перед переходом
+        router.refresh();
         router.push(redirectTo);
       }
     } catch {
